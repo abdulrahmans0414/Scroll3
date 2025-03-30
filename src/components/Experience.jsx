@@ -1,5 +1,6 @@
 import { OrbitControls, ScrollControls } from '@react-three/drei' // Note: OrbitControls moved to drei
 import { NB_FLOORS, Office } from './Office'
+import { Overlay } from './Overlay'
 
 function Experience() {
     return (
@@ -27,6 +28,9 @@ function Experience() {
                     castShadow  // Ensure the model casts shadows
                     receiveShadow  // If it should receive shadows (e.g., floor)
                 />
+
+                {/* add Overlay */}
+                <Overlay />
             </ScrollControls>
 
         </>
