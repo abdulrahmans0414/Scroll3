@@ -17,12 +17,12 @@ export function Office(props) {
     const ref = useRef();
     const tl = useRef();
     const scroll = useScroll();
+    const libraryRef = useRef();
+    const atticRef = useRef();
 
     // scroll animation
     useFrame(() => {
-        if (tl.current) {
-            tl.current.seek(scroll.offset * tl.current.duration())
-        }
+        tl.current.seek(tl.current.duration() * scroll.offset)
     })
 
     useLayoutEffect(() => {
@@ -37,35 +37,122 @@ export function Office(props) {
             },
             0
         )
+
+        // Office Rotation
+        tl.current.to(
+            ref.current.rotation,
+            { duration: 1, x: 0, y: Math.PI / 6, z: 0 },
+            0
+        );
+        tl.current.to(
+            ref.current.rotation,
+            { duration: 1, x: 0, y: -Math.PI / 6, z: 0 },
+            1
+        );
+
+        // Office movement
+        tl.current.to(
+            ref.current.position,
+            {
+                duration: 1,
+                x: -1,
+                z: 2,
+            },
+            0
+        );
+        tl.current.to(
+            ref.current.position,
+            {
+                duration: 1,
+                x: 1,
+                z: 2,
+            },
+            1
+        );
+
+        // LIBRARY FLOOR
+        tl.current.from(
+            libraryRef.current.position,
+            {
+                duration: 0.5,
+                x: -2,
+            },
+            0.5
+        );
+        tl.current.from(
+            libraryRef.current.rotation,
+            {
+                duration: 0.5,
+                y: -Math.PI / 2,
+            },
+            0
+        );
+
+        // ATTIC
+        tl.current.from(
+            atticRef.current.position,
+            {
+                duration: 1.5,
+                y: 2,
+            },
+            0
+        );
+
+        tl.current.from(
+            atticRef.current.rotation,
+            {
+                duration: 0.5,
+                y: Math.PI / 2,
+            },
+            1
+        );
+
+        tl.current.from(
+            atticRef.current.position,
+            {
+                duration: 0.5,
+
+                z: -2,
+            },
+            1.5
+        );
     }, [])
 
+
+
     return (
-        <group {...props} dispose={null} ref={ref}>
+        <group
+            {...props}
+            dispose={null}
+            ref={ref}
+            position={[0.5, -1, -1]}
+            rotation={[0, -Math.PI / 3, 0]}>
+
             {/* Main Office */}
             <mesh
                 geometry={nodes['01_office'].geometry}
                 material={materials['01']}
-                castShadow
-                receiveShadow
             />
 
             {/* Library (2nd floor) */}
-            <mesh
-                geometry={nodes['02_library'].geometry}
-                material={materials['02']}
-                position={[0, 2.114, -2.23]}
-                castShadow
-                receiveShadow
-            />
+            <group position={[0, 2.11, -2.23]}>
+                <group ref={libraryRef}>
+                    <mesh
+                        geometry={nodes['02_library'].geometry}
+                        material={materials['02']}
+                    />
+                </group>
+            </group>
 
             {/* Attic */}
-            <mesh
-                geometry={nodes['03_attic'].geometry}
-                material={materials['03']}
-                position={[-1.97, 4.227, -2.199]}
-                castShadow
-                receiveShadow
-            />
+            <group position={[-1.97, 4.227, -2.199]}>
+                <group ref={atticRef}>
+                    <mesh
+                        geometry={nodes['03_attic'].geometry}
+                        material={materials['03']}
+                    />
+                </group>
+            </group>
         </group>
     )
 }
