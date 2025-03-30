@@ -1,5 +1,5 @@
 import { OrbitControls, ScrollControls } from '@react-three/drei' // Note: OrbitControls moved to drei
-import { Office } from './Office'
+import { NB_FLOORS, Office } from './Office'
 
 function Experience() {
     return (
@@ -21,7 +21,7 @@ function Experience() {
             />
 
             {/* Scroll Controls */}
-            <ScrollControls pages={3} damping={0.25}>
+            <ScrollControls pages={NB_FLOORS} damping={0.25}>
                 {/* Office model with shadow casting */}
                 <Office
                     castShadow  // Ensure the model casts shadows
